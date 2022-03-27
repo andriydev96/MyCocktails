@@ -6,31 +6,22 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
 @Dao
-interface CategoryDAO {
+interface CocktailDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCategory(categories: ArrayList<Category>)
 
-    @Query("SELECT * FROM category ORDER BY name")
-    fun getCategories() : List<Category>
-}
-
-@Dao
-interface IngredientDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertIngredient(ingredients: ArrayList<Ingredient>)
 
-    @Query("SELECT * FROM ingredient ORDER BY name")
-    fun getIngredients() : List<Ingredient>
-}
-
-@Dao
-interface CocktailDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCocktail(cocktail: Cocktail)
-}
 
-@Dao
-interface CocktailIngredientsDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCocktailIngredients(cocktailIngredients: CocktailIngredients)
+
+    @Query("SELECT * FROM category ORDER BY name")
+    fun getCategories() : List<Category>
+
+    @Query("SELECT * FROM ingredient ORDER BY name")
+    fun getIngredients() : List<Ingredient>
 }

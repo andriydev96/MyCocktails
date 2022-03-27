@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/MainA">
 
     <TextView
         android:id="@+id/textViewCategory"
@@ -11,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="Category:"
+        android:textColor="@color/MainC"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/spinner"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -23,6 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="Ingredient:"
+        android:textColor="@color/MainC"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/spinner"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -32,11 +35,13 @@
 
     <Spinner
         android:id="@+id/spinner"
+        style="@android:style/Widget.Material.Spinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
+        android:backgroundTint="@color/MainE"
         app:layout_constraintEnd_toStartOf="@+id/buttonSearchByCategory"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewCategory" />
@@ -46,7 +51,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
         android:hint="Ingredient"
         app:layout_constraintEnd_toStartOf="@+id/buttonSearchByIngredient"
@@ -54,8 +59,10 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewIngredient" />
 
     <RadioGroup
+        android:id="@+id/radioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
         android:baselineAligned="false"
         android:measureWithLargestChild="false"
         android:nestedScrollingEnabled="false"
@@ -64,20 +71,26 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/autoCompleteTextView"
-        app:layout_constraintVertical_bias="0.69">
+        app:layout_constraintVertical_bias="0.8">
 
         <RadioButton
             android:id="@+id/radioButtonLocalSearch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:buttonTint="@color/MainD"
             android:checked="true"
-            android:text="Local Search" />
+            android:text="Local Search"
+            android:textColor="@color/MainC"
+            app:useMaterialThemeColors="false" />
 
         <RadioButton
             android:id="@+id/radioButtonInetSearch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Inet Search" />
+            android:buttonTint="@color/MainD"
+            android:text="Inet Search"
+            android:textColor="@color/MainC"
+            app:useMaterialThemeColors="false" />
     </RadioGroup>
 
     <Button
@@ -86,6 +99,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
         android:text="Search"
+        android:textColor="@color/MainC"
         app:layout_constraintBottom_toBottomOf="@+id/spinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/spinner" />
@@ -97,8 +111,20 @@
         android:cursorVisible="false"
         android:enabled="false"
         android:text="Search"
+        android:textColor="@color/MainC"
         app:layout_constraintBottom_toBottomOf="@+id/autoCompleteTextView"
         app:layout_constraintEnd_toEndOf="@+id/buttonSearchByCategory"
         app:layout_constraintTop_toTopOf="@+id/autoCompleteTextView" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminateTint="@color/MainD"
+        app:layout_constraintBottom_toTopOf="@+id/radioGroup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

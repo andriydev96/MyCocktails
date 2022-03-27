@@ -1,34 +1,27 @@
 package com.example.mycocktails
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.util.Log
+import androidx.room.Database
 import androidx.room.Room
 import com.android.volley.Response
-import com.example.mycocktails.Database.Category
-import com.example.mycocktails.Database.CocktailDB
-import com.example.mycocktails.Database.Ingredient
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.example.mycocktails.Database.*
+import kotlinx.coroutines.*
 
 class CocktailModel(context: Context) {
     private val network = Network.getInstance(context)
-    private val database = Room.databaseBuilder(
-            context,
-            CocktailDB::class.java,
-            "CocktailDB"
-    ).build()
+    private val database = CocktailDatabase.getInstance(context).database
 
     fun getCategories(listener: Response.Listener<List<Category>>, errorListener: Response.ErrorListener){
         GlobalScope.launch(Dispatchers.Main) {
             val categories = withContext(Dispatchers.IO){
-                database.categoryDao().getCategories()
+                database.cocktailDao().getCategories()
             }
             if (categories.isEmpty()){
                 network.getCategories({
                     GlobalScope.launch {
-                        database.categoryDao().insertCategory(it as ArrayList<Category>)
+                        database.cocktailDao().insertCategory(it as ArrayList<Category>)
                     }
                     Log.d("APP-ACTION", "Successfully got category list from the internet.\n$it")
                     listener.onResponse(it)
@@ -45,12 +38,12 @@ class CocktailModel(context: Context) {
     fun getIngredients(listener: Response.Listener<List<Ingredient>>, errorListener: Response.ErrorListener){
         GlobalScope.launch(Dispatchers.Main) {
             val ingredients = withContext(Dispatchers.IO){
-                database.ingredientDao().getIngredients()
+                database.cocktailDao().getIngredients()
             }
             if (ingredients.isEmpty()){
                 network.getIngredients({
                     GlobalScope.launch {
-                        database.ingredientDao().insertIngredient(it as ArrayList<Ingredient>)
+                        database.cocktailDao().insertIngredient(it as ArrayList<Ingredient>)
                     }
                     listener.onResponse(it)
                     Log.d("APP-ACTION", "Successfully got ingredient list from the internet.\n$it")
@@ -64,7 +57,19 @@ class CocktailModel(context: Context) {
         }
     }
 
-    fun getDrinksByCategory(listener: Response.Listener<List<String>>, errorListener: Response.ErrorListener, category: String){
+    fun getDrinksByCategory(listener: Response.Listener<List<Int>>, errorListener: Response.ErrorListener, category: String){
         network.getDrinksByCategory(listener, errorListener, category)
+    }
+
+    fun getDrinksByIngredient(listener: Response.Listener<List<Int>>, errorListener: Response.ErrorListener, ingredient: String){
+        network.getDrinksByIngredient(listener, errorListener, ingredient)
+    }
+
+    fun getDrinkFullData(listener: Response.Listener<CocktailFullData>, errorListener: Response.ErrorListener, drinkId : Int){
+        network.getDrinkFullData(listener, errorListener, drinkId)
+    }
+
+    fun getImage(listener: Response.Listener<Bitmap>, errorListener: Response.ErrorListener, url : String){
+        network.getImage(listener, errorListener, url)
     }
 }
