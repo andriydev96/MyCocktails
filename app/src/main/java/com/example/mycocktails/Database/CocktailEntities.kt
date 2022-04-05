@@ -38,12 +38,12 @@ data class Ingredient(
 data class Cocktail(
         @PrimaryKey
         val id: Int,
-        var name: String,
+        val name: String,
         val category: String,
         val alcohol: String,
         val glass: String,
         val instructions: String,
-        val grade: Int = 0,
+        var grade: Int = 0,
         val image: String
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
@@ -95,10 +95,10 @@ data class Cocktail(
                     entity = Ingredient::class,
                     parentColumns = ["name"],
                     childColumns = ["ingredient"]
-            )]
+            )],
+        primaryKeys = ["cocktailId", "ingredient", "measure"]
 )
 data class CocktailIngredients(
-        @PrimaryKey
         val cocktailId: Int,
         val ingredient: String,
         val measure: String

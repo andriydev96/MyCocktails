@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/MainA"
+    android:theme="@style/Theme.MyCocktails"
     tools:context=".dataActivity.DataActivity">
 
     <ScrollView
@@ -21,19 +22,19 @@
                 android:layout_height="match_parent">
 
                 <Button
-                    android:id="@+id/button"
+                    android:id="@+id/buttonAdd"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="ADD"
                     android:textColor="@color/MainC"
                     app:layout_constraintBottom_toBottomOf="@+id/textViewCocktailServedIn"
-                    app:layout_constraintEnd_toEndOf="@+id/button2"
-                    app:layout_constraintStart_toStartOf="@+id/button2"
+                    app:layout_constraintEnd_toEndOf="@+id/buttonRate"
+                    app:layout_constraintStart_toStartOf="@+id/buttonRate"
                     app:layout_constraintTop_toBottomOf="@+id/textViewCocktailName" />
 
                 <Button
-                    android:id="@+id/button2"
+                    android:id="@+id/buttonRate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="32dp"
@@ -41,7 +42,7 @@
                     android:textColor="@color/MainC"
                     app:layout_constraintBottom_toTopOf="@+id/textView"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/button" />
+                    app:layout_constraintTop_toBottomOf="@+id/buttonAdd" />
 
                 <TextView
                     android:id="@+id/textViewCocktailPreparation"

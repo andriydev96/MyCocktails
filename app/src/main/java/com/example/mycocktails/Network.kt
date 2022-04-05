@@ -6,6 +6,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import android.util.Log
 import android.widget.ImageView
+import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.VolleyError
@@ -145,10 +146,11 @@ class Network private constructor(context: Context) {
                     val cocktailIngredients = ArrayList<CocktailIngredients>()
 
                     for (i in 1..15){
-                        val ingredient = drinkObject.getString("strIngredient$i")
-                        val measure = if (drinkObject.isNull("strMeasure$i")) "" else drinkObject.getString("strMeasure$i")
-                        if (ingredient == "null") break
-                        else cocktailIngredients.add(CocktailIngredients(drinkId, ingredient, measure))
+                        val ingredient = if (drinkObject.getString("strIngredient$i") == "" || drinkObject.isNull("strIngredient$i")) break
+                            else drinkObject.getString("strIngredient$i")
+                        val measure = if (drinkObject.isNull("strMeasure$i")) ""
+                            else drinkObject.getString("strMeasure$i")
+                        cocktailIngredients.add(CocktailIngredients(drinkId, ingredient, measure))
                     }
 
                     val cocktailData = CocktailFullData(cocktail, cocktailIngredients)

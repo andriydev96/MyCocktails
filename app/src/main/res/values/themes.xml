@@ -12,5 +12,27 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">@color/MainB</item>
         <!-- Customize your theme here. -->
+        <item name="android:textColor">@color/MainD</item>
+    </style>
+    <style name="CategorySpinner" parent="Widget.AppCompat.Light.Spinner.DropDown.ActionBar">
+        <item name="android:theme">@style/DropDownTheme</item>
+        <item name="android:textAppearance">@style/Theme.MyCocktails</item>
+        <item name="android:spinnerItemStyle">@style/DropDownTheme</item>
+    </style>
+    <style name="DropDownTheme" parent="Theme.MyCocktails">
+        <item name="android:textColor">@color/MainE</item>
+        <item name="android:textColorHint">#48D6B037</item>
+        <item name="android:background">@color/MainB</item>
+    </style>
+    <style name="AutoCompleteTextView" parent="ThemeOverlay.Material3.AutoCompleteTextView">
+        <item name="android:theme">@style/DropDownTheme</item>
+        <item name="android:autoCompleteTextViewStyle">@style/DropDownTheme</item>
+        <item name="android:textColor">@color/MainE</item>
+    </style>
+    <style name="CustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorOnPrimary">@color/MainC</item>
+        <item name="android:textColor">@color/MainD</item>
+        <item name="android:textColorPrimary">@color/MainE</item>
+        <item name="android:background">@color/MainB</item>
     </style>
 </resources>

@@ -19,7 +19,6 @@ class ResultsActivity : AppCompatActivity() {
     lateinit var progressBar: ProgressBar
     lateinit var recyclerView: RecyclerView
     lateinit var presenter: ResultsPresenter
-
     lateinit var criterion: String
     lateinit var searchType: String
     var localSearch: Boolean = true

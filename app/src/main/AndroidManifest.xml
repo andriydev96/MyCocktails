@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyCocktails">
-        <activity android:name=".dataActivity.DataActivity"></activity>
+        <activity android:name=".dataActivity.DataActivity" />
         <activity android:name=".resultsActivity.ResultsActivity" />
         <activity android:name=".searchActivity.SearchActivity">
             <intent-filter>

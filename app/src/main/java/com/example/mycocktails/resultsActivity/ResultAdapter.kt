@@ -27,12 +27,18 @@ class ResultAdapter(val cocktailDataList : ArrayList<CocktailFullData>):Recycler
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        var ingredientString = ""
+        var ingredients = ArrayList<String>()
         for (i in 0 until cocktailDataList[position].cocktailIngredients.size){
+            ingredients.add(cocktailDataList[position].cocktailIngredients[i].ingredient)
+        }
+        ingredients = ingredients.distinct() as ArrayList<String>
+
+        var ingredientString = ""
+        for (i in 0 until ingredients.size){
             if (i == 0)
-                ingredientString = cocktailDataList[position].cocktailIngredients[i].ingredient
+                ingredientString = ingredients[i]
             else
-                ingredientString += ", " + cocktailDataList[position].cocktailIngredients[i].ingredient
+                ingredientString += ", " + ingredients[i]
         }
 
         holder.textViewDrinkName.text = cocktailDataList[position].cocktail.name

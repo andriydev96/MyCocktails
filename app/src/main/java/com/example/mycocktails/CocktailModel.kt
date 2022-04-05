@@ -57,16 +57,64 @@ class CocktailModel(context: Context) {
         }
     }
 
-    fun getDrinksByCategory(listener: Response.Listener<List<Int>>, errorListener: Response.ErrorListener, category: String){
+    fun getDrinksByCategoryInet(listener: Response.Listener<List<Int>>, errorListener: Response.ErrorListener, category: String){
         network.getDrinksByCategory(listener, errorListener, category)
     }
 
-    fun getDrinksByIngredient(listener: Response.Listener<List<Int>>, errorListener: Response.ErrorListener, ingredient: String){
+    fun getDrinksByIngredientInet(listener: Response.Listener<List<Int>>, errorListener: Response.ErrorListener, ingredient: String){
         network.getDrinksByIngredient(listener, errorListener, ingredient)
     }
 
-    fun getDrinkFullData(listener: Response.Listener<CocktailFullData>, errorListener: Response.ErrorListener, drinkId : Int){
+    fun getDrinkFullDataInet(listener: Response.Listener<CocktailFullData>, errorListener: Response.ErrorListener, drinkId : Int){
         network.getDrinkFullData(listener, errorListener, drinkId)
+    }
+
+    fun insertCocktail(cocktail: Cocktail, ingredientList: ArrayList<CocktailIngredients>){
+        GlobalScope.launch(Dispatchers.Main) {
+            withContext(Dispatchers.IO) {
+                database.cocktailDao().insertCocktail(cocktail)
+            }
+            for (ingredient in ingredientList) {
+                Log.d("APP-ACTION", "LISTA ENTERA: $ingredientList")
+                withContext(Dispatchers.IO) {
+                    database.cocktailDao().insertIngredient(Ingredient(ingredient.ingredient))
+                    database.cocktailDao().insertCocktailIngredients(ingredient)
+                }
+            }
+        }
+    }
+
+    fun getDrinksByCategoryDB(listener: Response.Listener<ArrayList<CocktailFullData>>, errorListener: Response.ErrorListener, category: String){
+        GlobalScope.launch(Dispatchers.Main) {
+            val cocktailDataList = ArrayList<CocktailFullData>()
+            val cocktails = withContext(Dispatchers.IO){
+                database.cocktailDao().getCocktailsByCategory(category)
+            }
+            for (cocktail in cocktails) {
+                withContext(Dispatchers.IO) {
+                    val ingredients = database.cocktailDao().getCocktailIngredients(cocktail.name) as  ArrayList<CocktailIngredients>
+                    cocktailDataList.add(CocktailFullData(cocktail, ingredients))
+                }
+            }
+            listener.onResponse(cocktailDataList)
+        }
+    }
+
+    fun getDrinksByIngredientDB(listener: Response.Listener<ArrayList<CocktailFullData>>, errorListener: Response.ErrorListener, ingredient: String){
+        GlobalScope.launch(Dispatchers.Main) {
+            val cocktailDataList = ArrayList<CocktailFullData>()
+            val cocktails = withContext(Dispatchers.IO){
+                database.cocktailDao().getCocktailsByIngredient(ingredient)
+            }
+            Log.d("APP-ACTION", "GOT THIS COCKTAILS: $cocktails")
+            for (cocktail in cocktails) {
+                withContext(Dispatchers.IO) {
+                    val ingredients = database.cocktailDao().getCocktailIngredients(cocktail.name) as  ArrayList<CocktailIngredients>
+                    cocktailDataList.add(CocktailFullData(cocktail, ingredients))
+                }
+            }
+            listener.onResponse(cocktailDataList)
+        }
     }
 
     fun getImage(listener: Response.Listener<Bitmap>, errorListener: Response.ErrorListener, url : String){

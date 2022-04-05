@@ -53,6 +53,13 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        showInterface(false)
+        presenter.getCategoryList()
+        presenter.getIngredientList()
+    }
+
     fun showCategories(list: ArrayList<Category>){
         val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, list)
         spinner.apply {
