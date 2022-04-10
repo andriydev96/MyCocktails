@@ -15,7 +15,7 @@ import com.example.mycocktails.Database.Ingredient
 import com.example.mycocktails.R
 import com.example.mycocktails.resultsActivity.ResultsActivity
 
-class SearchActivity : AppCompatActivity() {
+class SearchActivity : AppCompatActivity(), SearchView {
     lateinit var textViewCategory: TextView
     lateinit var textViewIngredient: TextView
     lateinit var spinner: Spinner
@@ -69,7 +69,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     //Manages the category Spinner
-    fun showCategories(list: ArrayList<Category>){
+    override fun showCategories(list: ArrayList<Category>){
         val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, list)
         spinner.apply {
             adapter = arrayAdapter
@@ -85,7 +85,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     //Manages the ingredients AutoCompleteTextView
-    fun showIngredients(list: ArrayList<Ingredient>){
+    override fun showIngredients(list: ArrayList<Ingredient>){
         val arrayAdapter = ArrayAdapter(this,android.R.layout.simple_dropdown_item_1line, list)
         autoCompleteTextView.apply {
             setAdapter(arrayAdapter)
@@ -104,17 +104,17 @@ class SearchActivity : AppCompatActivity() {
     }
 
     //Launches a Toast message in case an error occurs
-    fun showError(message: String){
+    override fun showError(message: String){
         Toast.makeText(this, message, LENGTH_SHORT).show()
     }
 
     //Enables/disables a given button
-    fun manageButton(button: Button, boolean: Boolean){
+    override fun manageButton(button: Button, boolean: Boolean){
         button.isEnabled = boolean
     }
 
     //Manages the interface visibility
-    fun showInterface(visible: Boolean){
+    override fun showInterface(visible: Boolean){
         textViewCategory.isVisible = visible
         textViewIngredient.isVisible = visible
         spinner.isVisible = visible

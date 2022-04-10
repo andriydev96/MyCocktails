@@ -10,7 +10,7 @@ import com.example.mycocktails.Database.Cocktail
 import com.example.mycocktails.Database.CocktailIngredients
 import com.example.mycocktails.R
 
-class DataActivity : AppCompatActivity(), DataRateDialogFragment.GradeListener {
+class DataActivity : AppCompatActivity(), DataView, DataRateDialogFragment.GradeListener {
     lateinit var cocktail: Cocktail
     lateinit var ingredients: ArrayList<CocktailIngredients>
 
@@ -71,7 +71,7 @@ class DataActivity : AppCompatActivity(), DataRateDialogFragment.GradeListener {
     }
 
     //Displays the cocktail data
-    fun displayData(name: String, alcohol: String, servedIn: String, category: String, score: String, preparation: String, ingredients: String){
+    override fun displayData(name: String, alcohol: String, servedIn: String, category: String, score: String, preparation: String, ingredients: String){
         textViewCocktailName.text = name
         textViewCocktailAlcohol.text = alcohol
         textViewServedIn.text = servedIn

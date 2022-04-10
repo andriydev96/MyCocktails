@@ -13,7 +13,7 @@ import com.example.mycocktails.Database.CocktailFullData
 import com.example.mycocktails.R
 import com.example.mycocktails.dataActivity.DataActivity
 
-class ResultsActivity : AppCompatActivity() {
+class ResultsActivity : AppCompatActivity(), ResultsView {
     lateinit var progressBar: ProgressBar
     lateinit var recyclerView: RecyclerView
     lateinit var presenter: ResultsPresenter
@@ -38,7 +38,7 @@ class ResultsActivity : AppCompatActivity() {
     }
 
     //Populates the RecyclerView with the given cocktail data list
-    fun displayDrinks(cocktailDataList: ArrayList<CocktailFullData>) {
+    override fun displayDrinks(cocktailDataList: ArrayList<CocktailFullData>) {
         if (recyclerView.adapter == null) {
             recyclerView.also {
                 val adapter = ResultAdapter(cocktailDataList)
@@ -55,17 +55,17 @@ class ResultsActivity : AppCompatActivity() {
     }
 
     //Enables/disables the ProgressBar
-    fun showProgressBar(show: Boolean){
+    override fun showProgressBar(show: Boolean){
         progressBar.isVisible = show
     }
 
     //Launches a Toast message in case an error occurs
-    fun showError(message: String){
+    override fun showError(message: String){
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
     //Launches the data activity
-    fun launchDataActivity(cocktail: CocktailFullData){
+    override fun launchDataActivity(cocktail: CocktailFullData){
         val intent = Intent(this, DataActivity::class.java).also {
             it.putExtra(COCKTAIL, cocktail.cocktail)
             it.putExtra(INGREDIENTS, cocktail.cocktailIngredients)
