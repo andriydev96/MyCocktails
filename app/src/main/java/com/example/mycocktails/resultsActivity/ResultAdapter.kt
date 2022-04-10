@@ -4,12 +4,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mycocktails.Database.CocktailFullData
 import com.example.mycocktails.R
 
-class ResultAdapter(val cocktailDataList : ArrayList<CocktailFullData>):RecyclerView.Adapter<ResultAdapter.ViewHolder>() {
+class ResultAdapter(private val cocktailDataList : ArrayList<CocktailFullData>):RecyclerView.Adapter<ResultAdapter.ViewHolder>() {
 
     private lateinit var itemListener : onItemClickListener
 

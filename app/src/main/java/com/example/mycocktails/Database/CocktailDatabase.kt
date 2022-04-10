@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.mycocktails.Network
 
 @Database(entities = [Category::class, Ingredient::class, Cocktail::class, CocktailIngredients::class], version = 1)
 abstract class CocktailDB : RoomDatabase() {

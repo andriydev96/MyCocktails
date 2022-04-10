@@ -9,10 +9,8 @@ import android.view.View
 import android.widget.*
 import android.widget.Toast.LENGTH_SHORT
 import androidx.core.view.isVisible
-import androidx.core.widget.addTextChangedListener
 import com.example.mycocktails.CocktailModel
 import com.example.mycocktails.Database.Category
-import com.example.mycocktails.Database.CocktailFullData
 import com.example.mycocktails.Database.Ingredient
 import com.example.mycocktails.R
 import com.example.mycocktails.resultsActivity.ResultsActivity
@@ -28,6 +26,7 @@ class SearchActivity : AppCompatActivity() {
     lateinit var radioButtonInetSearch: RadioButton
     lateinit var progressBar: ProgressBar
     lateinit var presenter: SearchPresenter
+    var recoveredSavedInstanceState: Bundle? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,8 +50,11 @@ class SearchActivity : AppCompatActivity() {
         buttonSearchByIngredient.setOnClickListener {
             launchResultsActivity(presenter.chosenIngr, radioButtonLocalSearch.isChecked)
         }
+
+        recoveredSavedInstanceState = savedInstanceState
     }
 
+    //Refreshes the lists in case a new category/ingredient has been added to the local database when returning to this activity
     override fun onResume() {
         super.onResume()
         showInterface(false)
@@ -60,6 +62,13 @@ class SearchActivity : AppCompatActivity() {
         presenter.getIngredientList()
     }
 
+    //Saves the spinner position in case the layout is switched
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("SPINNER_POSITION", spinner.selectedItemPosition)
+    }
+
+    //Manages the category Spinner
     fun showCategories(list: ArrayList<Category>){
         val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, list)
         spinner.apply {
@@ -75,6 +84,7 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    //Manages the ingredients AutoCompleteTextView
     fun showIngredients(list: ArrayList<Ingredient>){
         val arrayAdapter = ArrayAdapter(this,android.R.layout.simple_dropdown_item_1line, list)
         autoCompleteTextView.apply {
@@ -93,14 +103,17 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    //Launches a Toast message in case an error occurs
     fun showError(message: String){
         Toast.makeText(this, message, LENGTH_SHORT).show()
     }
 
+    //Enables/disables a given button
     fun manageButton(button: Button, boolean: Boolean){
         button.isEnabled = boolean
     }
 
+    //Manages the interface visibility
     fun showInterface(visible: Boolean){
         textViewCategory.isVisible = visible
         textViewIngredient.isVisible = visible
@@ -111,23 +124,39 @@ class SearchActivity : AppCompatActivity() {
         radioButtonLocalSearch.isEnabled = visible
         radioButtonInetSearch.isEnabled = visible
         progressBar.isVisible = !visible
+        checkLayoutOrientationChange(recoveredSavedInstanceState)
     }
 
-    fun launchResultsActivity(category: Category, localSearch: Boolean){
+    //Launches the results activity if a category search is made
+    private fun launchResultsActivity(category: Category, localSearch: Boolean){
         val intent = Intent(this, ResultsActivity::class.java).also {
-            it.putExtra("CRITERION", category.name)
-            it.putExtra("SEARCH_TYPE", "Category")
-            it.putExtra("LOCAL_SEARCH", localSearch)
+            it.putExtra(CRITERION, category.name)
+            it.putExtra(SEARCH_TYPE, "Category")
+            it.putExtra(LOCAL_SEARCH, localSearch)
         }
         startActivity(intent)
     }
 
-    fun launchResultsActivity(ingredient: Ingredient, localSearch: Boolean){
+    //Launches the results activity if a ingredient search is made
+    private fun launchResultsActivity(ingredient: Ingredient, localSearch: Boolean){
         val intent = Intent(this, ResultsActivity::class.java).also {
-            it.putExtra("CRITERION", ingredient.name)
-            it.putExtra("SEARCH_TYPE", "Ingredient")
-            it.putExtra("LOCAL_SEARCH", localSearch)
+            it.putExtra(CRITERION, ingredient.name)
+            it.putExtra(SEARCH_TYPE, "Ingredient")
+            it.putExtra(LOCAL_SEARCH, localSearch)
         }
         startActivity(intent)
+    }
+
+    //Recovers the spinner selected item in case the layout has been switched
+    private fun checkLayoutOrientationChange(savedInstanceState: Bundle?){
+        if (savedInstanceState != null){
+            spinner.setSelection(savedInstanceState.getInt("SPINNER_POSITION", 0))
+        }
+    }
+
+    companion object{
+        private const val CRITERION = "CRITERION"
+        private const val SEARCH_TYPE = "SEARCH_TYPE"
+        private const val LOCAL_SEARCH = "LOCAL_SEARCH"
     }
 }

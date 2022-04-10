@@ -30,8 +30,8 @@ class DataActivity : AppCompatActivity(), DataRateDialogFragment.GradeListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_data)
 
-        cocktail = intent.getParcelableExtra("COCKTAIL")!!
-        ingredients = intent.getParcelableArrayListExtra<CocktailIngredients>("INGREDIENTS")!!
+        cocktail = intent.getParcelableExtra(COCKTAIL)!!
+        ingredients = intent.getParcelableArrayListExtra<CocktailIngredients>(INGREDIENTS)!!
 
         textViewCocktailName = findViewById(R.id.textViewCocktailName)
         textViewCocktailAlcohol = findViewById(R.id.textViewCocktailAlcohol)
@@ -70,6 +70,7 @@ class DataActivity : AppCompatActivity(), DataRateDialogFragment.GradeListener {
         }
     }
 
+    //Displays the cocktail data
     fun displayData(name: String, alcohol: String, servedIn: String, category: String, score: String, preparation: String, ingredients: String){
         textViewCocktailName.text = name
         textViewCocktailAlcohol.text = alcohol
@@ -80,7 +81,13 @@ class DataActivity : AppCompatActivity(), DataRateDialogFragment.GradeListener {
         textViewIngredients.text = ingredients
     }
 
+    //Tells the presenter the new grade of the drink
     override fun onGradeAvailable(grade: Int) {
         presenter.gradeCocktail(grade)
+    }
+
+    companion object{
+        private const val COCKTAIL = "COCKTAIL"
+        private const val INGREDIENTS = "INGREDIENTS"
     }
 }

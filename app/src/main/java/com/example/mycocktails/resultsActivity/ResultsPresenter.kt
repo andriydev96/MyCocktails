@@ -3,9 +3,6 @@ package com.example.mycocktails.resultsActivity
 import android.util.Log
 import com.example.mycocktails.CocktailModel
 import com.example.mycocktails.Database.CocktailFullData
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 class ResultsPresenter(private val view: ResultsActivity, private val model: CocktailModel) {
     init {
@@ -14,7 +11,8 @@ class ResultsPresenter(private val view: ResultsActivity, private val model: Coc
 
     var cocktailDataList = ArrayList<CocktailFullData>()
 
-    fun doSearch(){
+    //Decides and executes a search taking in account the given criterion
+    private fun doSearch(){
         if (view.searchType == "Category") {
             doCategorySearch(view.criterion)
         } else {
@@ -22,7 +20,8 @@ class ResultsPresenter(private val view: ResultsActivity, private val model: Coc
         }
     }
 
-    fun doCategorySearch(category: String){
+    //Searches for the drinks given a category. Does it locally or online depending on the previously marked RadioButton.
+    private fun doCategorySearch(category: String){
         if (view.localSearch){
             model.getDrinksByCategoryDB(
                     {
@@ -58,7 +57,8 @@ class ResultsPresenter(private val view: ResultsActivity, private val model: Coc
         }
     }
 
-    fun doIngredientSearch(ingredient: String){
+    //Searches for the drinks given a ingredient. Does it locally or online depending on the previously marked RadioButton.
+    private fun doIngredientSearch(ingredient: String){
         if (view.localSearch){
             model.getDrinksByIngredientDB(
                     {
@@ -94,6 +94,7 @@ class ResultsPresenter(private val view: ResultsActivity, private val model: Coc
         }
     }
 
+    //Launches the data activity passing the data of the chosen cocktail
     fun cocktailSelect(position: Int) {
         view.launchDataActivity(cocktailDataList[position])
     }

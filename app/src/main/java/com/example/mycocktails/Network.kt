@@ -2,11 +2,8 @@ package com.example.mycocktails
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.os.Parcel
-import android.os.Parcelable
 import android.util.Log
 import android.widget.ImageView
-import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.VolleyError
@@ -16,6 +13,12 @@ import com.android.volley.toolbox.Volley
 import com.example.mycocktails.Database.*
 import org.json.JSONArray
 import org.json.JSONObject
+
+private const val CATEGORY_LIST_URL = "https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list"
+private const val INGREDIENT_LIST_URL = "https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list"
+private const val CATEGORY_FILTER_IRL = "https://www.thecocktaildb.com/api/json/v1/1/filter.php?c="
+private const val INGREDIENT_FILTER_IRL = "https://www.thecocktaildb.com/api/json/v1/1/filter.php?i="
+private const val LOOKUP_URL = "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i="
 
 class Network private constructor(context: Context) {
     companion object : SingletonHolder<Network, Context>(::Network)
@@ -32,11 +35,12 @@ class Network private constructor(context: Context) {
 
     private val queue = Volley.newRequestQueue(context)
 
+    //Builds a list of the categories from the api
     fun getCategories(listener: Response.Listener<List<Category>>, errorListener: Response.ErrorListener) {
         val categoryList = ArrayList<Category>()
         val request = JsonObjectRequest(
                 Request.Method.GET,
-                "https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list",
+                CATEGORY_LIST_URL,
                 null,
                 { response ->
                     val categoryArray: JSONArray = response.getJSONArray("drinks")
@@ -55,11 +59,12 @@ class Network private constructor(context: Context) {
         queue.add(request)
     }
 
+    //Builds a list of the ingredients from the api
     fun getIngredients(listener: Response.Listener<List<Ingredient>>, errorListener: Response.ErrorListener) {
         val ingredientList = ArrayList<Ingredient>()
         val request = JsonObjectRequest(
                 Request.Method.GET,
-                "https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list",
+                INGREDIENT_LIST_URL,
                 null,
                 { response ->
                     val ingredientArray: JSONArray = response.getJSONArray("drinks")
@@ -78,11 +83,12 @@ class Network private constructor(context: Context) {
         queue.add(request)
     }
 
+    //Builds a list of the ids of drinks that pertain to a given category
     fun getDrinksByCategory(listener: Response.Listener<List<Int>>, errorListener: Response.ErrorListener, categoryName: String) {
         val drinkList = ArrayList<Int>()
         val request = JsonObjectRequest(
                 Request.Method.GET,
-                "https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=$categoryName",
+                CATEGORY_FILTER_IRL + categoryName,
                 null,
                 { response ->
                     val drinkArray: JSONArray = response.getJSONArray("drinks")
@@ -102,11 +108,12 @@ class Network private constructor(context: Context) {
         queue.add(request)
     }
 
+    //Builds a list of the ids of drinks that contain a given ingredient
     fun getDrinksByIngredient(listener: Response.Listener<List<Int>>, errorListener: Response.ErrorListener, ingredientName: String) {
         val drinkList = ArrayList<Int>()
         val request = JsonObjectRequest(
                 Request.Method.GET,
-                "https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=$ingredientName",
+                INGREDIENT_FILTER_IRL + ingredientName,
                 null,
                 { response ->
                     val drinkArray: JSONArray = response.getJSONArray("drinks")
@@ -126,10 +133,11 @@ class Network private constructor(context: Context) {
         queue.add(request)
     }
 
+    //Builds a CocktailFullData object containing all the data we need of a drink given it's id
     fun getDrinkFullData(listener: Response.Listener<CocktailFullData>, errorListener: Response.ErrorListener, drinkId: Int) {
         val request = JsonObjectRequest(
                 Request.Method.GET,
-                "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=$drinkId",
+                LOOKUP_URL + drinkId,
                 null,
                 { response ->
                     val drinkArray: JSONArray = response.getJSONArray("drinks")
@@ -163,6 +171,7 @@ class Network private constructor(context: Context) {
         queue.add(request)
     }
 
+    //Downloads the bitmap image of a drink given it's url
     fun getImage(listener: Response.Listener<Bitmap>, errorListener: Response.ErrorListener, url: String){
         val request = ImageRequest(
             url,

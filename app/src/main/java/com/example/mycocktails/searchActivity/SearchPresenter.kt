@@ -17,6 +17,7 @@ class SearchPresenter(private val view: SearchActivity, private val model: Cockt
     lateinit var chosenCtgr : Category
     lateinit var chosenIngr : Ingredient
 
+    //Gets the list of categories and passes it to the search activity
     fun getCategoryList() {
         model.getCategories(
                 {
@@ -28,6 +29,7 @@ class SearchPresenter(private val view: SearchActivity, private val model: Cockt
         )
     }
 
+    //Gets the list of ingredients and passes it to the search activity
     fun getIngredientList(){
         model.getIngredients(
                 {
@@ -39,11 +41,13 @@ class SearchPresenter(private val view: SearchActivity, private val model: Cockt
         )
     }
 
-    fun checkLists(){
+    //If both lists have been successfully recovered, tells the view to activate the interface
+    private fun checkLists(){
         if (gotCategories && gotIngredients) {
             view.showInterface(true) }
     }
 
+    //Saves chosen category, erases possible input from ingredients AutoCompleteTextView and enables/disables the respective buttons
     fun setChosenCategory(category: Category) {
         chosenCtgr = category
         view.manageButton(view.buttonSearchByCategory, true)
@@ -51,6 +55,7 @@ class SearchPresenter(private val view: SearchActivity, private val model: Cockt
         view.autoCompleteTextView.setText("")
     }
 
+    //Saves chosen ingredient and enables/disables the respective buttons
     fun setChosenIngredient(ingredient: Ingredient) {
         chosenIngr = ingredient
         view.manageButton(view.buttonSearchByCategory, false)

@@ -3,8 +3,6 @@ package com.example.mycocktails
 import android.content.Context
 import android.graphics.Bitmap
 import android.util.Log
-import androidx.room.Database
-import androidx.room.Room
 import com.android.volley.Response
 import com.example.mycocktails.Database.*
 import kotlinx.coroutines.*
@@ -13,6 +11,7 @@ class CocktailModel(context: Context) {
     private val network = Network.getInstance(context)
     private val database = CocktailDatabase.getInstance(context).database
 
+    //Returns the list of categories from the database. If empty, retrieves it from the api, saves it to the database, and then returns it.
     fun getCategories(listener: Response.Listener<List<Category>>, errorListener: Response.ErrorListener){
         GlobalScope.launch(Dispatchers.Main) {
             val categories = withContext(Dispatchers.IO){
@@ -35,6 +34,7 @@ class CocktailModel(context: Context) {
         }
     }
 
+    //Returns the list of ingredients from the database. If empty, retrieves it from the api, saves it to the database, and then returns it.
     fun getIngredients(listener: Response.Listener<List<Ingredient>>, errorListener: Response.ErrorListener){
         GlobalScope.launch(Dispatchers.Main) {
             val ingredients = withContext(Dispatchers.IO){
@@ -57,18 +57,22 @@ class CocktailModel(context: Context) {
         }
     }
 
+    //Gets the id list of the drinks pertaining to a given category from the internet
     fun getDrinksByCategoryInet(listener: Response.Listener<List<Int>>, errorListener: Response.ErrorListener, category: String){
         network.getDrinksByCategory(listener, errorListener, category)
     }
 
+    //Gets the id list of the drinks containing a given ingredient from the internet
     fun getDrinksByIngredientInet(listener: Response.Listener<List<Int>>, errorListener: Response.ErrorListener, ingredient: String){
         network.getDrinksByIngredient(listener, errorListener, ingredient)
     }
 
+    //Gets all the important data of a drink given it's id from the internet
     fun getDrinkFullDataInet(listener: Response.Listener<CocktailFullData>, errorListener: Response.ErrorListener, drinkId : Int){
         network.getDrinkFullData(listener, errorListener, drinkId)
     }
 
+    //Stores a cocktail and it's ingredients in the local database
     fun insertCocktail(cocktail: Cocktail, ingredientList: ArrayList<CocktailIngredients>){
         GlobalScope.launch(Dispatchers.Main) {
             withContext(Dispatchers.IO) {
@@ -84,6 +88,7 @@ class CocktailModel(context: Context) {
         }
     }
 
+    //Gets the important data of the drinks pertaining to a given category from the local database
     fun getDrinksByCategoryDB(listener: Response.Listener<ArrayList<CocktailFullData>>, errorListener: Response.ErrorListener, category: String){
         GlobalScope.launch(Dispatchers.Main) {
             val cocktailDataList = ArrayList<CocktailFullData>()
@@ -100,6 +105,7 @@ class CocktailModel(context: Context) {
         }
     }
 
+    //Gets the important data of the drinks containing a given ingredient from the local database
     fun getDrinksByIngredientDB(listener: Response.Listener<ArrayList<CocktailFullData>>, errorListener: Response.ErrorListener, ingredient: String){
         GlobalScope.launch(Dispatchers.Main) {
             val cocktailDataList = ArrayList<CocktailFullData>()
@@ -117,6 +123,7 @@ class CocktailModel(context: Context) {
         }
     }
 
+    //Gets the bitmap image of a cocktail from the given url
     fun getImage(listener: Response.Listener<Bitmap>, errorListener: Response.ErrorListener, url : String){
         network.getImage(listener, errorListener, url)
     }
